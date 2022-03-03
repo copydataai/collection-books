@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=collection_books
+POSTGRES_USER=mmTzAKrJysrFnExpLxDajCADtoZZyncc
+POSTGRES_PASSWORD=9GUahvZZm5R4bobx7sBsTxrTGrVsNFRsrgQxddmlVMZT6EnME1OL6gN420GxFOl6
