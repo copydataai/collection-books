@@ -277,3 +277,10 @@ collection_books/media/
 .env
 .envs/*
 !.envs/.local/
+node_modules
+*.log*
+.nuxt
+.nitro
+.cache
+.output
+.env
