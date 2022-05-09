@@ -1,0 +1,10 @@
+version: '3'
+services:
+  nuxt:
+    build:
+      context: .
+      dockerfile: ./compose/local/nuxt/Dockerfile
+    image: collection_books_local_nuxt
+    container_name: collection_books_local_nuxt
+    ports:
+      - "3000:3000"

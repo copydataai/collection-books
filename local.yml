@@ -1,0 +1,78 @@
+version: '3'
+
+volumes:
+  local_postgres_data: {}
+  local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: ./api
+      dockerfile: ./compose/local/django/Dockerfile
+    image: collection_books_local_django
+    container_name: collection_books_local_django
+    platform: linux/x86_64
+    depends_on:
+      - postgres
+      - redis
+      - mailhog
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./.envs/.local/.django
+      - ./.envs/.local/.postgres
+    ports:
+      - "8000:8000"
+    command: /start
+
+  nuxt:
+    build:
+      context: ./client
+      dockerfile: ./compose/local/nuxt/Dockerfile
+    image: collection_books_local_nuxt
+    container_name: collection_books_local_nuxt
+    depends_on:
+      - django
+    ports:
+      - "3000:3000"
+
+  postgres:
+    build:
+      context: ./api
+      dockerfile: ./compose/production/postgres/Dockerfile
+    image: collection_books_production_postgres
+    container_name: collection_books_local_postgres
+    volumes:
+      - local_postgres_data:/var/lib/postgresql/data:Z
+      - local_postgres_data_backups:/backups:z
+    env_file:
+      - ./.envs/.local/.postgres
+    ports:
+      - "5432:5432"
+
+  # docs:
+  #   image: collection_books_local_docs
+  #   container_name: collection_books_local_docs
+  #   platform: linux/x86_64
+  #   build:
+  #     context: .
+  #     dockerfile: ./compose/local/docs/Dockerfile
+  #   env_file:
+  #     - ./api/.envs/.local/.django
+  #   volumes:
+  #     - ./docs:/docs:z
+  #     - ./config:/app/config:z
+  #     - ./collection_books:/app/collection_books:z
+  #   ports:
+  #     - "9000:9000"
+  #   command: /start-docs
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.0
+    container_name: collection_books_local_mailhog
+    ports:
+      - "8025:8025"
+
+  redis:
+    image: redis:6
+    container_name: collection_books_local_redis
